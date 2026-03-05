@@ -3,6 +3,7 @@ package dev.pacr;
 import io.quarkus.security.webauthn.WebAuthnCredentialRecord;
 import io.quarkus.security.webauthn.WebAuthnUserProvider;
 import io.smallrye.mutiny.Uni;
+import io.smallrye.mutiny.infrastructure.Infrastructure;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
@@ -11,7 +12,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Bridges the Quarkus WebAuthn security layer to our in-memory user store.
+ * Bridges the Quarkus WebAuthn security layer to our JPA-backed user store.
+ * All methods offload blocking JPA work to a worker thread so that the Vert.x
+ * IO (event-loop) thread is never blocked.
  */
 @ApplicationScoped
 public class PasskeyUserProvider implements WebAuthnUserProvider {
@@ -24,14 +27,14 @@ public class PasskeyUserProvider implements WebAuthnUserProvider {
 	 */
 	@Override
 	public Uni<List<WebAuthnCredentialRecord>> findByUsername(String username) {
-		User user = userStore.findByUsername(username);
-		if (user == null) {
-			return Uni.createFrom().item(Collections.emptyList());
-		}
-		List<WebAuthnCredentialRecord> records =
-				user.credentials.stream().map(WebAuthnCredential::toCredentialRecord)
-						.collect(Collectors.toList());
-		return Uni.createFrom().item(records);
+		return Uni.createFrom().<List<WebAuthnCredentialRecord>>item(() -> {
+			User user = userStore.findByUsername(username);
+			if (user == null) {
+				return Collections.emptyList();
+			}
+			return user.credentials.stream().map(WebAuthnCredential::toCredentialRecord)
+					.collect(Collectors.toList());
+		}).runSubscriptionOn(Infrastructure.getDefaultWorkerPool());
 	}
 	
 	/**
@@ -39,13 +42,14 @@ public class PasskeyUserProvider implements WebAuthnUserProvider {
 	 */
 	@Override
 	public Uni<WebAuthnCredentialRecord> findByCredentialId(String credentialId) {
-		User user = userStore.findByCredentialId(credentialId);
-		if (user == null) {
-			return Uni.createFrom().nullItem();
-		}
-		return user.credentials.stream().filter(c -> c.credentialId.equals(credentialId))
-				.findFirst().map(c -> Uni.createFrom().item(c.toCredentialRecord()))
-				.orElse(Uni.createFrom().nullItem());
+		return Uni.createFrom().item(() -> {
+			User user = userStore.findByCredentialId(credentialId);
+			if (user == null) {
+				return null;
+			}
+			return user.credentials.stream().filter(c -> c.credentialId.equals(credentialId))
+					.findFirst().map(WebAuthnCredential::toCredentialRecord).orElse(null);
+		}).runSubscriptionOn(Infrastructure.getDefaultWorkerPool());
 	}
 	
 	/**
@@ -53,12 +57,10 @@ public class PasskeyUserProvider implements WebAuthnUserProvider {
 	 */
 	@Override
 	public Uni<Void> store(WebAuthnCredentialRecord record) {
-		WebAuthnCredentialRecord.RequiredPersistedData data = record.getRequiredPersistedData();
-		User user = userStore.getOrCreate(data.username());
-		// avoid duplicates
-		user.credentials.removeIf(c -> c.credentialId.equals(data.credentialId()));
-		user.credentials.add(new WebAuthnCredential(data));
-		return Uni.createFrom().voidItem();
+		return Uni.createFrom().<Void>item(() -> {
+			userStore.store(record.getRequiredPersistedData());
+			return null;
+		}).runSubscriptionOn(Infrastructure.getDefaultWorkerPool());
 	}
 	
 	/**
@@ -66,15 +68,9 @@ public class PasskeyUserProvider implements WebAuthnUserProvider {
 	 */
 	@Override
 	public Uni<Void> update(String credentialId, long counter) {
-		User user = userStore.findByCredentialId(credentialId);
-		if (user != null) {
-			for (WebAuthnCredential cred : user.credentials) {
-				if (cred.credentialId.equals(credentialId)) {
-					cred.counter = counter;
-					break;
-				}
-			}
-		}
-		return Uni.createFrom().voidItem();
+		return Uni.createFrom().<Void>item(() -> {
+			userStore.updateCounter(credentialId, counter);
+			return null;
+		}).runSubscriptionOn(Infrastructure.getDefaultWorkerPool());
 	}
 }
