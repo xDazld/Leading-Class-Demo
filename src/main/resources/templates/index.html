@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>PassKey Demo — Home</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: #0d1117;
+            color: #e6edf3;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        .hero {
+            text-align: center;
+            max-width: 560px;
+            padding: 2rem;
+        }
+
+        .key-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 2.4rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #58a6ff, #a371f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.75rem;
+        }
+
+        p.subtitle {
+            color: #8b949e;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        a.btn {
+            display: inline-block;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+
+        a.btn:hover {
+            opacity: 0.85;
+        }
+
+        a.btn-primary {
+            background: #238636;
+            color: #fff;
+        }
+
+        a.btn-secondary {
+            background: #21262d;
+            color: #58a6ff;
+            border: 1px solid #30363d;
+        }
+
+        .info-box {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 1.5rem 2rem;
+            max-width: 520px;
+            font-size: 0.95rem;
+            color: #8b949e;
+            line-height: 1.7;
+        }
+
+        .info-box h2 {
+            color: #e6edf3;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="hero">
+    <div class="key-icon">🔑</div>
+    <h1>Passkey Demo</h1>
+    <p class="subtitle">
+        A password-free login experience. Register once with a passkey,
+        then sign in securely using your device's biometrics or PIN —
+        no passwords needed.
+    </p>
+    <div class="btn-group">
+        <a href="/signup" class="btn btn-primary">Create Account</a>
+        <a href="/login" class="btn btn-secondary">Sign In</a>
+    </div>
+</div>
+
+<div class="info-box">
+    <h2>🛡️ What is a passkey?</h2>
+    A passkey is a cryptographic key pair stored on your device.
+    When you sign in, your device proves who you are using biometrics
+    (fingerprint / face) or a PIN — your secret never leaves the device
+    and no password is ever transmitted or stored.
+</div>
+
+</body>
+</html>
+

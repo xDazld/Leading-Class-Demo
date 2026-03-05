@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Dashboard — Passkey Demo</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: #0d1117;
+            color: #e6edf3;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+            padding: 2rem;
+        }
+
+        .card {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 2.5rem 2rem;
+            width: 100%;
+            max-width: 480px;
+            text-align: center;
+        }
+
+        .avatar {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .username {
+            color: #58a6ff;
+        }
+
+        p.sub {
+            color: #8b949e;
+            margin-top: 0.4rem;
+            font-size: 0.95rem;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #1a3a21;
+            border: 1px solid #238636;
+            color: #3fb950;
+            border-radius: 20px;
+            padding: 0.3rem 1rem;
+            font-size: 0.82rem;
+            margin-top: 1rem;
+        }
+
+        hr.divider {
+            border: none;
+            border-top: 1px solid #30363d;
+            margin: 1.5rem 0;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            text-align: left;
+            margin-bottom: 1.5rem;
+        }
+
+        .info-item {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+        }
+
+        .info-item .label {
+            font-size: 0.75rem;
+            color: #8b949e;
+            margin-bottom: 0.2rem;
+        }
+
+        .info-item .value {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        a.btn-logout {
+            display: inline-block;
+            padding: 0.65rem 1.75rem;
+            background: #21262d;
+            border: 1px solid #30363d;
+            color: #f85149;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+
+        a.btn-logout:hover {
+            background: #3b1414;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <div class="avatar">🧑‍💻</div>
+    <h1>Welcome, <span class="username">{username}</span>!</h1>
+    <p class="sub">You're signed in using a passkey.</p>
+    <span class="badge">✅ Authenticated via WebAuthn / Passkey</span>
+
+    <hr class="divider"/>
+
+    <div class="info-grid">
+        <div class="info-item">
+            <div class="label">Auth method</div>
+            <div class="value">🔑 Passkey</div>
+        </div>
+        <div class="info-item">
+            <div class="label">Password used?</div>
+            <div class="value">❌ None</div>
+        </div>
+        <div class="info-item">
+            <div class="label">Credential type</div>
+            <div class="value">WebAuthn</div>
+        </div>
+        <div class="info-item">
+            <div class="label">Phishing resistant?</div>
+            <div class="value">✅ Yes</div>
+        </div>
+    </div>
+
+    <a href="/q/webauthn/logout" class="btn-logout">Sign Out</a>
+</div>
+
+</body>
+</html>
+
