@@ -3,8 +3,14 @@
 const webAuthn = new WebAuthn();
 
 async function login() {
+    const username = document.getElementById('username').value.trim();
     const btn = document.getElementById('loginBtn');
     const msg = document.getElementById('statusMsg');
+
+    if (!username) {
+        show(msg, 'error', '\u26a0\ufe0f Please enter your username.');
+        return;
+    }
 
     btn.disabled = true;
     btn.textContent = '\u23f3 Verifying passkey\u2026';
@@ -12,7 +18,7 @@ async function login() {
     msg.style.display = 'none';
 
     try {
-        await webAuthn.login();
+        await webAuthn.login({username: username});
         show(msg, 'success', '\u2705 Signed in! Redirecting\u2026');
         setTimeout(function () {
             window.location.href = '/dashboard';
