@@ -39,6 +39,16 @@
             margin-bottom: 1rem;
         }
 
+        .logo {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #30363d;
+            margin: 0 auto 1rem;
+            display: block;
+        }
+
         h1 {
             font-size: 1.8rem;
             font-weight: 700;
@@ -118,6 +128,7 @@
 <body>
 
 <div class="card">
+    <img src="{logoPath}" alt="Site logo" class="logo"/>
     <div class="avatar">🧑‍💻</div>
     <h1>Welcome, <span class="username">{username}</span>!</h1>
     <p class="sub">You're signed in using a password manager.</p>

@@ -39,6 +39,16 @@
             font-size: 2.8rem;
         }
 
+        .card-header .logo {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #30363d;
+            display: block;
+            margin: 0 auto 0.75rem;
+        }
+
         h1 {
             font-size: 1.6rem;
             font-weight: 700;
@@ -177,6 +187,7 @@
 
 <div class="card">
     <div class="card-header">
+        <img src="{logoPath}" alt="Site logo" class="logo"/>
         <div class="icon">🗝️</div>
         <h1>Sign In</h1>
         <p>Use your password manager</p>
@@ -201,9 +212,11 @@
         Nothing is typed — there's no password to steal.
     </div>
 
-    <div class="footer-link">
-        Don't have an account? <a href="/signup">Create one</a>
-    </div>
+    {#if canSignup}
+        <div class="footer-link">
+            Don't have an account? <a href="/signup">Create one</a>
+        </div>
+    {/if}
 </div>
 
 <!-- Quarkus WebAuthn helper script -->

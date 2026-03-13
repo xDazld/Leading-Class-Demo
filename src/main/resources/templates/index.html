@@ -29,6 +29,15 @@
             padding: 2rem;
         }
 
+        .logo {
+            width: 96px;
+            height: 96px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #30363d;
+            margin-bottom: 1rem;
+        }
+
         .key-icon {
             font-size: 5rem;
             margin-bottom: 1rem;
@@ -104,6 +113,7 @@
 <body>
 
 <div class="hero">
+    <img src="{logoPath}" alt="Site logo" class="logo"/>
     <div class="key-icon">🔑</div>
     <h1>Password Manager Demo</h1>
     <p class="subtitle">
@@ -112,7 +122,9 @@
         no passwords needed.
     </p>
     <div class="btn-group">
+        {#if canSignup}
         <a href="/signup" class="btn btn-primary">Create Account</a>
+        {/if}
         <a href="/login" class="btn btn-secondary">Sign In</a>
     </div>
 </div>
